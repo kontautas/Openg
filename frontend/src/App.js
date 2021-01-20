@@ -8,39 +8,43 @@ import Notification from "./components/Notification";
 import Popup from "./components/Popup";
 import EnterForm from "./components/EnterForm";
 import { showNotification as show } from "./helpers/helpers";
-const words = ["application", "programming", "interface", "wizard"];
-let selectedWord = words[Math.floor(Math.random() * words.length)];
+
 function App() {
-  const [playable, setPlayable] = useState(true);
+  const [selectedWord, setSelectedWord] = useState("");
   const [correctLetters, setCorrectLetters] = useState([]);
   const [wrongLetters, setWrongLetters] = useState([]);
   const [showNotification, setShowNotification] = useState(false);
+  const [won, setWon] = useState(false);
+  const [endgame, setEndgame] = useState(false);
   useEffect(() => {
-    fetchData();
-  });
+    const time = new Date();
+    const data = { id: time.getTime() };
+    sessionStorage.setItem("id", time.getTime());
 
-  const fetchData = async () => {
     try {
-      await fetch(`http://127.0.0.1:9000/`, {
-        method: "GET",
-        "Content-Type": "application/json",
+      fetch(`http://127.0.0.1:9000/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
       })
         .then((response) => response.json())
-        .then((data) => console.log(data));
+        .then((data) => {
+          setSelectedWord(data.selectedWord);
+          setCorrectLetters(data.correctLetters);
+          setWrongLetters(data.wrongLetters);
+        });
     } catch (err) {
       console.log(err);
     }
-  };
-  function playAgain() {
-    setPlayable(true);
+  }, []);
+  useEffect(() => {
+    if (showNotification) {
+      show(setShowNotification);
+    }
+  }, [showNotification]);
 
-    // Empty Arrays
-    setCorrectLetters([]);
-    setWrongLetters([]);
-
-    const random = Math.floor(Math.random() * words.length);
-    selectedWord = words[random];
-  }
   return (
     <div>
       <Header></Header>
@@ -53,11 +57,18 @@ function App() {
         correctLetters={correctLetters}
         wrongLetters={wrongLetters}
         selectedWord={selectedWord}
-        setPlayable={setPlayable}
-        playAgain={playAgain}
+        won={won}
+        endgame={endgame}
       />
       <Notification showNotification={showNotification} />
-      <EnterForm />
+      <EnterForm
+        id={sessionStorage.getItem("id")}
+        changeWrongLetters={(value) => setWrongLetters(value)}
+        changeCorrectLetters={(value) => setCorrectLetters(value)}
+        changeShowNotification={(value) => setShowNotification(value)}
+        changeWon={(value) => setWon(value)}
+        changeEndgame={(value) => setEndgame(value)}
+      />
     </div>
   );
 }

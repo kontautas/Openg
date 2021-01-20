@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
-const EnterForm = () => {
+const EnterForm = (props) => {
   const [letter, setLetter] = useState("");
-
+  const inputRef = useRef(null);
+  useEffect(() => {
+    inputRef.current.focus();
+  });
   const handleSubmit = (e) => {
     e.preventDefault();
-    const data = { letter: letter };
-    console.log(JSON.stringify(data));
+    const data = { letter: letter, id: props.id };
     try {
       fetch(`http://127.0.0.1:9000/sendLetter`, {
         method: "POST",
@@ -17,8 +19,13 @@ const EnterForm = () => {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log("Success:", data);
-        });
+          props.changeCorrectLetters(data.correctLetters);
+          props.changeWrongLetters(data.wrongLetters);
+          props.changeShowNotification(data.showNotification);
+          props.changeWon(data.won);
+          props.changeEndgame(data.endgame);
+        })
+        .then(e.target.reset());
     } catch (err) {
       console.log(err);
     }
@@ -29,6 +36,7 @@ const EnterForm = () => {
       <form onSubmit={handleSubmit}>
         <p>Enter your letter:</p>
         <input
+          ref={inputRef}
           type="text"
           required
           maxLength="1"

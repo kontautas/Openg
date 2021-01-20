@@ -1,29 +1,17 @@
-import React, { useEffect } from "react";
-import { checkWin } from "../helpers/helpers";
+import React from "react";
 
-const Popup = ({
-  correctLetters,
-  wrongLetters,
-  selectedWord,
-  setPlayable,
-  playAgain,
-}) => {
+const Popup = ({ selectedWord, won, endgame }) => {
   let finalMessage = "";
   let finalMessageRevealWord = "";
-  let playable = true;
 
-  if (checkWin(correctLetters, wrongLetters, selectedWord) === "win") {
-    finalMessage = "Congratulations! You won! 😃";
-    playable = false;
-  } else if (checkWin(correctLetters, wrongLetters, selectedWord) === "lose") {
-    finalMessage = "Unfortunately you lost. 😕";
-    finalMessageRevealWord = `...the word was: ${selectedWord}`;
-    playable = false;
+  if (endgame) {
+    if (won) {
+      finalMessage = "Congratulations! You won! 😃";
+    } else {
+      finalMessage = "Unfortunately you lost. 😕";
+      finalMessageRevealWord = `...the word was: ${selectedWord}`;
+    }
   }
-
-  useEffect(() => {
-    setPlayable(playable);
-  });
 
   return (
     <div
@@ -33,7 +21,7 @@ const Popup = ({
       <div className="popup">
         <h2>{finalMessage}</h2>
         <h3>{finalMessageRevealWord}</h3>
-        <button onClick={playAgain}>Play Again</button>
+        <button onClick={() => window.location.reload()}>Play Again</button>
       </div>
     </div>
   );
