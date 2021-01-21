@@ -60,7 +60,7 @@ function checkWin(correct, wrong, word) {
     }
   });
 
-  if (wrong.length === 11) status = "lose";
+  if (wrong.length === 10) status = "lose";
 
   return status;
 }

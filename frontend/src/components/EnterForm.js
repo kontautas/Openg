@@ -36,7 +36,7 @@ const EnterForm = (props) => {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <label for="letter" class="form-label">
+        <label htmlFor="letter" className="form-label">
           Enter a letter:
         </label>
         <input
