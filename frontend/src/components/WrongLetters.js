@@ -1,3 +1,5 @@
+////////------------------------------------NE MANO----------------------------------------//////////
+
 import React from "react";
 
 const WrongLetters = ({ wrongLetters }) => {

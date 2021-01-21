@@ -1,12 +1,13 @@
-var express = require("express");
-var router = express.Router();
+////////------------------------------------MANO----------------------------------------//////////
+
+const express = require("express");
+const router = express.Router();
 
 const words = ["zebra", "crocodile", "red", "apple", "green", "pencil"];
 
 const NodeCache = require("node-cache");
 const myCache = new NodeCache();
 
-/* GET home page. */
 router.post("/", function (req, res, next) {
   const random = Math.floor(Math.random() * words.length);
   const selectedWord = words[random];
@@ -21,10 +22,12 @@ router.post("/", function (req, res, next) {
   myCache.set(req.body.id, obj, 10000);
   res.send(obj);
 });
+
 router.post("/sendLetter", function (req, res, next) {
   const letter = req.body.letter;
   const id = req.body.id;
   const obj = myCache.get(id);
+
   if (obj.selectedWord.includes(letter)) {
     if (!obj.correctLetters.includes(letter)) {
       obj.correctLetters = [...obj.correctLetters, letter];
@@ -51,14 +54,12 @@ router.post("/sendLetter", function (req, res, next) {
 function checkWin(correct, wrong, word) {
   let status = "win";
 
-  // Check for win
   word.split("").forEach((letter) => {
     if (!correct.includes(letter)) {
       status = "";
     }
   });
 
-  // Check for lose
   if (wrong.length === 11) status = "lose";
 
   return status;

@@ -129,3 +129,8 @@ h1 {
 .notification-container.show {
   transform: translateY(-50px);
 }
+.form-control-inline {
+  min-width: 0;
+  width: 50%;
+  margin-bottom: 10px;
+}

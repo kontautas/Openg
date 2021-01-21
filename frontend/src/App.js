@@ -1,3 +1,5 @@
+////////------------------------------------MANO----------------------------------------//////////
+
 import "./App.css";
 import React, { useState, useEffect } from "react";
 import Header from "./components/Header";
@@ -16,6 +18,7 @@ function App() {
   const [showNotification, setShowNotification] = useState(false);
   const [won, setWon] = useState(false);
   const [endgame, setEndgame] = useState(false);
+
   useEffect(() => {
     const time = new Date();
     const data = { id: time.getTime() };
@@ -47,7 +50,7 @@ function App() {
 
   return (
     <div>
-      <Header></Header>
+      <Header />
       <div className="game-container">
         <Figure wrongLetters={wrongLetters} />
         <WrongLetters wrongLetters={wrongLetters} />

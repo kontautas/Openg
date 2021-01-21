@@ -1,3 +1,5 @@
+////////------------------------------------MANO MODIFIKUOTA----------------------------------------//////////
+
 import React from "react";
 
 const Popup = ({ selectedWord, won, endgame }) => {
@@ -5,7 +7,7 @@ const Popup = ({ selectedWord, won, endgame }) => {
   let finalMessageRevealWord = "";
 
   if (endgame) {
-    if (won) {
+    if (won === "win") {
       finalMessage = "Congratulations! You won! 😃";
     } else {
       finalMessage = "Unfortunately you lost. 😕";

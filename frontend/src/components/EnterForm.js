@@ -1,3 +1,5 @@
+////////------------------------------------MANO----------------------------------------//////////
+
 import React, { useState, useEffect, useRef } from "react";
 
 const EnterForm = (props) => {
@@ -8,7 +10,7 @@ const EnterForm = (props) => {
   });
   const handleSubmit = (e) => {
     e.preventDefault();
-    const data = { letter: letter, id: props.id };
+    const data = { letter: letter.toLocaleLowerCase(), id: props.id };
     try {
       fetch(`http://127.0.0.1:9000/sendLetter`, {
         method: "POST",
@@ -34,7 +36,9 @@ const EnterForm = (props) => {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <p>Enter your letter:</p>
+        <label for="letter" class="form-label">
+          Enter a letter:
+        </label>
         <input
           ref={inputRef}
           type="text"
@@ -46,8 +50,9 @@ const EnterForm = (props) => {
           id="letter"
           name="letter"
           onChange={(e) => setLetter(e.target.value)}
+          className="form-control form-control-inline"
         />
-        <input type="submit" />
+        <input type="submit" className="btn btn-primary" value="Try!" />
       </form>
     </div>
   );
