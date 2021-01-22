@@ -11,7 +11,7 @@ const myCache = new NodeCache();
 router.post("/", function (req, res, next) {
   const random = Math.floor(Math.random() * words.length);
   const selectedWord = words[random];
-  const obj = {
+  const gameState = {
     selectedWord: selectedWord,
     wrongLetters: [],
     correctLetters: [],
@@ -19,36 +19,40 @@ router.post("/", function (req, res, next) {
     won: false,
     endgame: false,
   };
-  myCache.set(req.body.id, obj, 10000);
-  res.send(obj);
+  myCache.set(req.body.id, gameState, 10000);
+  res.send(gameState);
 });
 
 router.post("/sendLetter", function (req, res, next) {
   const letter = req.body.letter;
   const id = req.body.id;
-  const obj = myCache.get(id);
+  const gameState = myCache.get(id);
 
-  if (obj.selectedWord.includes(letter)) {
-    if (!obj.correctLetters.includes(letter)) {
-      obj.correctLetters = [...obj.correctLetters, letter];
+  if (gameState.selectedWord.includes(letter)) {
+    if (!gameState.correctLetters.includes(letter)) {
+      gameState.correctLetters = [...gameState.correctLetters, letter];
     } else {
-      obj.showNotification = true;
+      gameState.showNotification = true;
     }
   } else {
-    if (!obj.wrongLetters.includes(letter)) {
-      obj.wrongLetters = [...obj.wrongLetters, letter];
+    if (!gameState.wrongLetters.includes(letter)) {
+      gameState.wrongLetters = [...gameState.wrongLetters, letter];
     } else {
-      obj.showNotification = true;
+      gameState.showNotification = true;
     }
   }
 
-  obj.won = checkWin(obj.correctLetters, obj.wrongLetters, obj.selectedWord);
+  gameState.won = checkWin(
+    gameState.correctLetters,
+    gameState.wrongLetters,
+    gameState.selectedWord
+  );
 
-  if (obj.won === "win" || obj.won === "lose") {
-    obj.endgame = true;
+  if (gameState.won === "win" || gameState.won === "lose") {
+    gameState.endgame = true;
   }
-  myCache.set(req.body.id, obj, 10000);
-  res.send(obj);
+  myCache.set(req.body.id, gameState, 10000);
+  res.send(gameState);
 });
 
 function checkWin(correct, wrong, word) {

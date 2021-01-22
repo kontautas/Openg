@@ -9,7 +9,7 @@ import Word from "./components/Word";
 import Notification from "./components/Notification";
 import Popup from "./components/Popup";
 import EnterForm from "./components/EnterForm";
-import { showNotification as show } from "./helpers/helpers";
+import { showNotification as show } from "./helpers/Helpers";
 
 function App() {
   const [selectedWord, setSelectedWord] = useState("");
